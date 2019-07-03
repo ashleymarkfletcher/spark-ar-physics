@@ -1,4 +1,4 @@
-import CANNON from 'cannon'
+import CANNON from './cannon'
 
 export default class CannonHelper {
   constructor(worldObjects) {
