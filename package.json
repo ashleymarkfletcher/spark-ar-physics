@@ -8,20 +8,13 @@
     "url": "git+https://github.com/ashleymarkfletcher/spark-ar-physics.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
-    "dev": "webpack --mode production --watch"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Ashley Fletcher <ashleymarkfletcher@gmail.com>",
   "license": "ISC",
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "webpack-cli": "^3.3.2"
-  },
+  "devDependencies": {},
   "dependencies": {
-    "cannon": "github:schteppe/cannon.js",
-    "webpack": "^4.31.0"
+    "cannon": "github:schteppe/cannon.js"
   }
 }
