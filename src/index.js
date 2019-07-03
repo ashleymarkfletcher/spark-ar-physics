@@ -78,12 +78,7 @@ export default class CannonHelper {
   addWorldObject(worldObject) {
     this.world.addBody(worldObject.physicsObject)
 
-    worldObject.transform = worldObject.sceneObject.getTransform()
-
-    // sync the scale initially so that everything matches
     this.worldObjects.push(worldObject)
-
-    this.syncScale(worldObject.transform, worldObject.physicsObject)
   }
 
   syncPos(SceneObject, cannonBody) {
