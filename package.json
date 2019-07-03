@@ -1,15 +1,19 @@
 {
   "name": "sparkTest",
   "version": "1.0.0",
-  "description": "",
+  "description": "Spark AR physics helper with Cannon.js",
   "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashleymarkfletcher/spark-ar-physics.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "dev": "webpack --mode production --watch "
+    "dev": "webpack --mode production --watch"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ashley Fletcher <ashleymarkfletcher@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
