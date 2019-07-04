@@ -1,6 +1,6 @@
 {
   "name": "spark-ar-physics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spark AR physics helper with Cannon.js",
   "main": "src/index.js",
   "repository": {
