@@ -8,155 +8,65 @@ const fd = Scene.root
   .child('Camera')
   .child('Focal Distance')
 const planeTracker = Scene.root.child('planeTracker0')
-const TouchGestures = require('TouchGestures')
 
-import CANNON from 'cannon'
-import CannonHelper from './cannonHelper'
-
-const rangeMap = (input, inLow, inHigh, outLow, outHigh) => {
-  return Math.round(((input - inLow) / (inHigh - inLow)) * (outHigh - outLow) + outLow)
-}
+import CannonHelper from 'spark-ar-physics'
 
 // show switch camera instructions on front camera
 Instruction.bind(CameraInfo.captureDevicePosition.eq(CameraInfo.CameraPosition.FRONT), 'flip_camera')
 
 var floorPlane = planeTracker.child('plane0')
-// get all the pins
-var ball = planeTracker.child('BowlingBall')
-var pin = planeTracker.child('Bowling_Pin')
-var pin2 = planeTracker.child('Bowling_Pin0')
-var pin3 = planeTracker.child('Bowling_Pin1')
-var pin4 = planeTracker.child('Bowling_Pin2')
-var pin5 = planeTracker.child('Bowling_Pin3')
-var pin6 = planeTracker.child('Bowling_Pin4')
-var pin7 = planeTracker.child('Bowling_Pin5')
-var pin8 = planeTracker.child('Bowling_Pin6')
-var pin9 = planeTracker.child('Bowling_Pin7')
-var pin10 = planeTracker.child('Bowling_Pin8')
-
-var pins = [pin, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9, pin10]
-
-// var world = new CANNON.World()
-// world.gravity.set(0, -19.82, 0) // m/s²
-
-// Create a sphere
-var radius = 6 // m
-var sphereBody = new CANNON.Body({
-  mass: 2, // kg
-  position: new CANNON.Vec3(0, 10, 0), // m
-  shape: new CANNON.Sphere(radius)
-})
-
-function initPin(pos) {
-  var pinBody = new CANNON.Body({
-    mass: 0.2,
-    position: pos,
-    shape: new CANNON.Box(new CANNON.Vec3(2, 10, 2))
-    // DYNAMIC: 1
-    // fixedRotation: true
-    // linearDamping: 0.1,
-    // angularDamping: 0.5
-  })
-  //   world.addBody(pinBody)
-  return pinBody
-}
+var cube0 = planeTracker.child('Cube0')
+var sphere0 = planeTracker.child('Sphere0')
+var cube1 = planeTracker.child('Cube1')
+var sphere1 = planeTracker.child('Sphere1')
+var cube2 = planeTracker.child('Cube2')
+var sphere2 = planeTracker.child('Sphere2')
 
 var floor = CannonHelper.makeFloor()
 
-var worldObjects = [{ sceneObject: floorPlane, physicsObject: floor }, { sceneObject: ball, physicsObject: sphereBody }]
+// create the world objects
+// world objects contain a scenObject and a physicsObject
+var worldObjects = [
+  { sceneObject: floorPlane, physicsObject: floor },
+  {
+    sceneObject: cube0,
+    physicsObject: CannonHelper.makeBox({ x: 5, y: 5, z: 5 }, { x: 0, y: 40, z: 0 }, { x: 0.2, y: 0.8, z: 0, w: 0 })
+  },
+  {
+    sceneObject: cube1,
+    physicsObject: CannonHelper.makeBox({ x: 5, y: 5, z: 5 }, { x: 10, y: 40, z: 0 }, { x: 0.6, y: 0.2, z: 0, w: 0 })
+  },
+  {
+    sceneObject: cube2,
+    physicsObject: CannonHelper.makeBox({ x: 5, y: 5, z: 5 }, { x: 0, y: 30, z: 10 }, { x: 0.1, y: 0.2, z: 0.5, w: 0 })
+  },
+  {
+    sceneObject: sphere0,
+    physicsObject: CannonHelper.makeSphere({ x: 5 }, { x: 0, y: 30, z: 0 }, { x: 0.2, y: 0.5, z: 0, w: 0 })
+  },
+  {
+    sceneObject: sphere1,
+    physicsObject: CannonHelper.makeSphere({ x: 5 }, { x: 15, y: 60, z: 0 }, { x: 0.2, y: 0.5, z: 0, w: 0 })
+  },
+  {
+    sceneObject: sphere2,
+    physicsObject: CannonHelper.makeSphere({ x: 5 }, { x: 0, y: 50, z: 10 }, { x: 0.2, y: 0.5, z: 0, w: 0 })
+  }
+]
 
-// ----------------------------- create the pins -------------------------------
-// set the base position for the pins
-var initialPinX = 0
-var initialPinY = 10
-var initialPinZ = -70
-
-// this could defintely be done better :')
-function initPinPos() {
-  return [
-    //1
-    new CANNON.Vec3(initialPinX + 0, initialPinY + 10, initialPinZ + -10),
-    //2
-    new CANNON.Vec3(initialPinX + -5, initialPinY + 10, initialPinZ + -15),
-    new CANNON.Vec3(initialPinX + 5, initialPinY + 10, initialPinZ + -15),
-    //3
-    new CANNON.Vec3(initialPinX + -10, initialPinY + 10, initialPinZ + -20),
-    new CANNON.Vec3(initialPinX + 0, initialPinY + 10, initialPinZ + -20),
-    new CANNON.Vec3(initialPinX + 10, initialPinY + 10, initialPinZ + -20),
-    //4
-    new CANNON.Vec3(initialPinX + -15, initialPinY + 10, initialPinZ + -25),
-    new CANNON.Vec3(initialPinX + -5, initialPinY + 10, initialPinZ + -25),
-    new CANNON.Vec3(initialPinX + 5, initialPinY + 10, initialPinZ + -25),
-    new CANNON.Vec3(initialPinX + 15, initialPinY + 10, initialPinZ + -25)
-  ]
-}
-
-var pinPos = initPinPos()
-pins.forEach((pin, i) => {
-  worldObjects.push({ sceneObject: pin, physicsObject: initPin(pinPos[i]) })
-})
-
-var cannonHelper = new CannonHelper(worldObjects)
+// init the cannon world with the worldObjects
+var cannon = new CannonHelper(worldObjects)
 
 var loopTimeMs = 30
 var lastTime
 Time.ms.interval(loopTimeMs).subscribe(function(elapsedTime) {
   if (lastTime !== undefined) {
+    // get the time since the last update
     var deltaTime = (elapsedTime - lastTime) / 1000
-    // world.step(fixedTimeStep, deltaTime, maxSubSteps)
 
-    cannonHelper.update(deltaTime)
+    // update the internal cannon world
+    cannon.update(deltaTime)
   }
 
   lastTime = elapsedTime
 })
-
-TouchGestures.onTap().subscribe(function(e) {
-  // convert the x of the tap to an x for force later
-  const xDirection = rangeMap(e.location.x, 0, 750, -50, 50)
-
-  throwBall(xDirection)
-})
-
-function resetGame() {
-  sphereBody.position = new CANNON.Vec3(0, 5, 0)
-  sphereBody.angularVelocity = new CANNON.Vec3(0, 0, 0)
-  sphereBody.velocity = new CANNON.Vec3(0, 0, 0)
-  sphereBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), 0)
-
-  // reset the pin positions, they change with the pins so don't stay their init value
-  pinPos = initPinPos()
-
-  // loop over all the world objects
-  for (let i = 0; i < worldObjects.length; i++) {
-    // skip the first two objects - ball/floor
-    if (i > 1) {
-      // reset the body
-      cannonHelper.resetBody(worldObjects[i].physicsObject, pinPos[i - 2])
-    }
-  }
-}
-
-var resetTimer
-var thrown = false
-
-function throwBall(xDirection) {
-  if (thrown) return
-
-  var force = new CANNON.Vec3(xDirection, 0, -300)
-  var pos = new CANNON.Vec3(0, 0, 0)
-
-  // apply an impulse on the ball to move it
-  sphereBody.applyLocalImpulse(force, pos)
-
-  thrown = true
-  if (resetTimer) {
-    Time.clearTimeout(resetTimer)
-    resetTimer = null
-  }
-
-  resetTimer = Time.setTimeout(function(elapsedTime) {
-    resetGame()
-    thrown = false
-  }, 5000)
-}
