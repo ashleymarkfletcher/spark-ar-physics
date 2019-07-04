@@ -30,7 +30,7 @@ export default class CannonHelper {
     this.CANNON = CANNON
 
     // set the gravity
-    this.world.gravity.set(0, -29.82, 0) // m/s²
+    this.world.gravity.set(0, -19.82, 0) // m/s²
 
     // set up the initial objects
     this.worldObjects.forEach((worldObject, i) => {
