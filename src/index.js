@@ -41,38 +41,31 @@ export default class CannonHelper {
       // this.worldObjects[i].physicsObject = this.world.addBody(worldObject.physicsObject)
       this.world.addBody(worldObject.physicsObject)
 
-      //   // save the transform for later
-      //   // using getTransform everywhere seemed to have a performance hit
-      //   worldObject.transform = worldObject.sceneObject.getTransform()
-
       // sync the scale initially so that everything matches
-      //   this.syncScale(this.worldObjects[i].transform, this.worldObjects[i].physicsObject)
+      //   this.syncScale(this.worldObjects[i], this.worldObjects[i].physicsObject)
     })
   }
 
   bodyPos(cannonBody) {
-    return new vec3(cannonBody.position.x, cannonBody.position.y, cannonBody.position.z)
+    // return new vec3(cannonBody.position.x, cannonBody.position.y, cannonBody.position.z)
   }
 
   // return the scale/size of a physics object
   // use for scaling a sceneObject to match the physics world
   bodyScale(cannonBody) {
-    const shape = cannonBody.shapes[0]
-
-    switch (shape.type) {
-      case this.ShapeTypes.SPHERE:
-        return new vec3(shape.radius, shape.radius, shape.radius)
-        break
-      case this.ShapeTypes.PLANE:
-        return new vec3(10, 10, 10)
-        break
-
-      case this.ShapeTypes.BOX:
-      default:
-        const size = shape.halfExtents
-
-        return new vec3(size.x / 8, size.y / 8, size.z / 8)
-    }
+    // const shape = cannonBody.shapes[0]
+    // switch (shape.type) {
+    //   case this.ShapeTypes.SPHERE:
+    //     return new vec3(shape.radius, shape.radius, shape.radius)
+    //     break
+    //   case this.ShapeTypes.PLANE:
+    //     return new vec3(10, 10, 10)
+    //     break
+    //   case this.ShapeTypes.BOX:
+    //   default:
+    //     const size = shape.halfExtents
+    //     return new vec3(size.x / 8, size.y / 8, size.z / 8)
+    // }
   }
 
   addWorldObject(worldObject) {
@@ -83,30 +76,23 @@ export default class CannonHelper {
 
   syncPos(SceneObject, cannonBody) {
     var transform = SceneObject.transform
-    // var newPos = bodyPos(cannonBody)
-    // transform.setLocalPosition(newPos)
 
     transform.x = cannonBody.position.x
     transform.y = cannonBody.position.y
     transform.z = cannonBody.position.z
 
-    // var rot = cannonBody.quaternion.toEuler()]
-    var newRot = {}
-    var rot = cannonBody.quaternion.toEuler(newRot)
-    // Diagnostics.log(rot)
-    // var rot =  cannonBody.quaternion.toEuler(cannonBody.quaternion)
-    // Diagnostics.log(newRot)
-    transform.rotationX = newRot.x
-    transform.rotationY = newRot.y
-    transform.rotationZ = newRot.z
+    var rotation = {}
+    var rot = cannonBody.quaternion.toEuler(rotation)
 
-    // transform.setLocalRotation(new quat(rot.w, rot.x, rot.y, rot.z))
+    transform.rotationX = rotation.x
+    transform.rotationY = rotation.y
+    transform.rotationZ = rotation.z
   }
 
-  syncScale(transform, cannonBody) {
-    // const transform = sceneObject.getTransform()
-    const physicsSize = this.bodyScale(cannonBody)
-    transform.setWorldScale(physicsSize)
+  syncScale(sceneObject, cannonBody) {
+    // const transform = sceneObject.transform
+    // const physicsSize = this.bodyScale(cannonBody)
+    // set the scale
   }
 
   resetBody(cannonBody, pos) {
